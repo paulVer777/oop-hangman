@@ -1,8 +1,8 @@
-const HangmanGame = function (word, attempts) {
+const HangmanGame = function (word) {
 
     this.word = word.toLowerCase().split('')
     this.win = []
-    this.left = attempts
+    this.left = Math.round(word.length/2)
     this.givenShoots = []
     this.status='playing'
 }

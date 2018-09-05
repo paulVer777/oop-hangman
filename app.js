@@ -1,6 +1,6 @@
 
 
-const game = new HangmanGame('computer', 5)
+const game = new HangmanGame('cat')
 
 window.addEventListener('keypress', (e) => {
 
