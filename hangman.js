@@ -2,9 +2,9 @@ const HangmanGame = function (word) {
 
     this.word = word.toLowerCase().split('')
     this.win = []
-    this.left = Math.round(word.length/2)
+    this.left = Math.round(word.length / 2)
     this.givenShoots = []
-    this.status='playing'
+    this.status = 'playing'
 }
 
 HangmanGame.prototype.shoot = function (shoot) {
@@ -24,10 +24,10 @@ HangmanGame.prototype.shoot = function (shoot) {
     console.log(` Given shoots: ${this.givenShoots}`)
     console.log(`Shoots left:${this.left}`)
 
-    document.querySelector('#counter').innerHTML=''
+    document.querySelector('#counter').innerHTML = ''
 
-    const span=document.createElement('span')
-    span.textContent=this.left
+    const span = document.createElement('span')
+    span.textContent = this.left
     document.querySelector('#counter').appendChild(span)
 
 }
@@ -57,11 +57,21 @@ HangmanGame.prototype.getPuzzleBack = function () {
     })
 }
 
-HangmanGame.prototype.calculate=function(){
+HangmanGame.prototype.calculate = function () {
 
-   this.left > 0 ? this.status='playing' : ''
-   this.left === 0 ? this.status='failed' : ''
-   this.win.length === this.word.length ? this.status='finished' : ''
+    this.left > 0 ? this.status = 'playing' : ''
+    this.left === 0 ? this.status = 'failed' : ''
+    this.win.length === this.word.length ? this.status = 'finished' : ''
 
-   console.log(this.status)
+    console.log(this.status)
+}
+
+HangmanGame.prototype.alerts = function () {
+
+    let alert = document.querySelector('#alert')
+
+    this.status === 'playing' ? alert.textContent = `Guesses left: ${this.left}` : ''
+    this.status === 'finished' ? alert.textContent = 'Congratulations' : ''
+    this.status === 'failed' ? alert.textContent = `Game over, correct word: ${this.word.join('')}` : ''
+
 }
