@@ -1,77 +1,82 @@
-const HangmanGame = function (word) {
+class HangmanGame {
 
-    this.word = word.toLowerCase().split('')
-    this.win = []
-    this.left = Math.round(word.length / 2)
-    this.givenShoots = []
-    this.status = 'playing'
-}
+    constructor(word) {
+        this.word = word.toLowerCase().split('')
+        this.win = []
+        this.left = Math.round(word.length / 2)
+        this.givenShoots = []
+        this.status = 'playing'
+    }
 
-HangmanGame.prototype.shoot = function (shoot) {
+    shoot(shoot) {
 
-    if (!this.word.includes(shoot) && !this.givenShoots.includes(shoot)) this.left--
+        if (!this.word.includes(shoot) && !this.givenShoots.includes(shoot)) this.left--
 
-    else if (this.word.includes(shoot) && !this.givenShoots.includes(shoot)) {
+        else if (this.word.includes(shoot) && !this.givenShoots.includes(shoot)) {
+
+            this.word.forEach((value, index) => {
+
+                value === shoot ? this.win[index] = value : ''
+            })
+        }
+
+        !this.givenShoots.includes(shoot) ? this.givenShoots.push(shoot) : ''
+
+        console.log(` Given shoots: ${this.givenShoots}`)
+        console.log(`Shoots left:${this.left}`)
+
+        document.querySelector('#counter').innerHTML = ''
+
+        const span = document.createElement('span')
+        span.textContent = this.left
+        document.querySelector('#counter').appendChild(span)
+
+
+    }
+
+    getPuzzleBack() {
+
+        const result = []
 
         this.word.forEach((value, index) => {
 
-            value === shoot ? this.win[index] = value : ''
+            //   value === this.win[index] ? result.push(value) : result.push('*')
+
+            if (value === this.win[index]) result.push(value)
+            else if (value === ' ') result.push(' ')
+            else result.push('*')
+
+        });
+
+        document.querySelector('#boxForPassword').innerHTML = ''
+
+        result.forEach((value, index) => {
+
+            const span = document.createElement('span')
+            span.textContent = value
+            document.querySelector('#boxForPassword').appendChild(span)
+
         })
+
     }
 
-    !this.givenShoots.includes(shoot) ? this.givenShoots.push(shoot) : ''
+    calculate() {
 
-    console.log(` Given shoots: ${this.givenShoots}`)
-    console.log(`Shoots left:${this.left}`)
+        this.left > 0 ? this.status = 'playing' : ''
+        this.left === 0 ? this.status = 'failed' : ''
+        this.win.length === this.word.length ? this.status = 'finished' : ''
 
-    document.querySelector('#counter').innerHTML = ''
+        console.log(this.status)
 
-    const span = document.createElement('span')
-    span.textContent = this.left
-    document.querySelector('#counter').appendChild(span)
+    }
 
-}
+    alerts() {
 
-HangmanGame.prototype.getPuzzleBack = function () {
+        let alert = document.querySelector('#alert')
 
-    const result = []
+        this.status === 'playing' ? alert.textContent = `Guesses left: ${this.left}` : ''
+        this.status === 'finished' ? alert.textContent = 'Congratulations' : ''
+        this.status === 'failed' ? alert.textContent = `Game over, correct word: ${this.word.join('')}` : ''
 
-    this.word.forEach((value, index) => {
-
-        //   value === this.win[index] ? result.push(value) : result.push('*')
-
-        if (value === this.win[index]) result.push(value)
-        else if (value === ' ') result.push(' ')
-        else result.push('*')
-
-    });
-
-    document.querySelector('#boxForPassword').innerHTML = ''
-
-    result.forEach((value, index) => {
-
-        const span = document.createElement('span')
-        span.textContent = value
-        document.querySelector('#boxForPassword').appendChild(span)
-
-    })
-}
-
-HangmanGame.prototype.calculate = function () {
-
-    this.left > 0 ? this.status = 'playing' : ''
-    this.left === 0 ? this.status = 'failed' : ''
-    this.win.length === this.word.length ? this.status = 'finished' : ''
-
-    console.log(this.status)
-}
-
-HangmanGame.prototype.alerts = function () {
-
-    let alert = document.querySelector('#alert')
-
-    this.status === 'playing' ? alert.textContent = `Guesses left: ${this.left}` : ''
-    this.status === 'finished' ? alert.textContent = 'Congratulations' : ''
-    this.status === 'failed' ? alert.textContent = `Game over, correct word: ${this.word.join('')}` : ''
-
+    }
 }
